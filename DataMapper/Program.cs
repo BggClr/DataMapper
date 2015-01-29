@@ -46,7 +46,8 @@
             this.y = y;
             this.z = z;
             this.w = w;
-            CachedMagnitude = 42;
+
+            CachedMagnitude = (float) Math.Sqrt(x * x + y * y + z * z + w * w);
         }
 
         #region Overrides of ValueType
@@ -63,17 +64,15 @@
     {
         private static void Main(string[] args)
         {
-            var mapper = new IntersectMapper();
+            var mapper = new IntersectionMapper();
 
             var c = new Vector4Class(1, 2, 3, 4);
             var cc = mapper.Map<Vector4Class, Vector4Struct>(c);
-            Console.WriteLine("source: {0}, dest: {1}", c, cc);
+            Console.WriteLine("[class->struct] source: {0}, dest: {1}", c, cc);
 
-            /*
             var s = new Vector4Struct(1, 4, 9, 16);
             var sc = mapper.Map<Vector4Struct, Vector4Class>(s);
-            Console.WriteLine("source: {0}, dest: {1}", s, sc);
-             */
+            Console.WriteLine("[struct->class] source: {0}, dest: {1}", s, sc);
 
             Console.WriteLine("Press any key to close the window...");
             Console.ReadKey();
