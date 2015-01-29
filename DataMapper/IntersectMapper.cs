@@ -48,7 +48,7 @@
                                            owner: field.DeclaringType);
             var generator = method.GetILGenerator();
 
-            generator.Emit(OpCodes.Ldarg, 0);
+            generator.Emit(OpCodes.Ldarg_0);
             generator.Emit(OpCodes.Ldfld, field);
             generator.Emit(OpCodes.Ret);
 
@@ -68,20 +68,22 @@
             Debug.Assert(field.DeclaringType == typeof(TObject));
 
             var method = new DynamicMethod("", returnType: typeof(void),
-                                           parameterTypes: new[] { field.DeclaringType, field.FieldType },
+                                           parameterTypes: new[] { typeof(object), typeof(object) },
                                            owner: field.DeclaringType);
             var generator = method.GetILGenerator();
 
-            generator.Emit(field.DeclaringType.IsValueType ? OpCodes.Ldarga : OpCodes.Ldarg, 0);
-            generator.Emit(OpCodes.Ldarg, 1);
+            generator.Emit(OpCodes.Ldarg_0);
+            generator.Emit(OpCodes.Unbox, field.DeclaringType);
+            generator.Emit(OpCodes.Ldarg_1);
+            generator.Emit(OpCodes.Unbox_Any, field.FieldType);
             generator.Emit(OpCodes.Stfld, field);
             generator.Emit(OpCodes.Ret);
             
             Debug.Assert(method != null);
 
-            method.Invoke(o, new[] {o, value});
-
-            Console.WriteLine(o);
+            var boxed = (object) o;
+            method.Invoke(o, new[] {boxed, value});
+            o = (TObject) boxed;
         }
     }
 }
