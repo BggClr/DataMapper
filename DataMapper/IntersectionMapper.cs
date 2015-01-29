@@ -7,7 +7,7 @@
     using System.Reflection.Emit;
     using System.Runtime.Serialization;
 
-    class IntersectionMapper : IMapper
+	public class IntersectionMapper : IMapper
     {
         private static readonly BindingFlags BindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
